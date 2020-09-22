@@ -37,6 +37,15 @@ ol, ul {
   line-height: 1.2em;
   font-size: 1.2em;
   margin: 5px;
+  padding: 5px;
+  background-color: #03a5fc;
+  border-radius: 5px;
+  border: none;
+}
+
+.nice-button:hover {
+  cursor: pointer;
+  background-color: #0380fc;
 }
 
 

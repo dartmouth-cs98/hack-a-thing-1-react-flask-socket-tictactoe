@@ -40,6 +40,7 @@ function GameIdInput(props) {
     >
         Start New Game
     </button>
+    <p>{props.message}</p>
   </div>
   )
 }
@@ -95,6 +96,7 @@ class Game extends React.Component {
       currentTurn: 'X',
       gameId: null,
       socket: null,
+      gameMessage: null,
     }
   }
 
@@ -118,7 +120,8 @@ class Game extends React.Component {
         currentTurn: data.turn,
         gameId: data.game_id,
         squares: Array(9).fill(null),
-        history: [{}]
+        history: [{}],
+        gameMessage: `Successfully started game ${data.game_id}!`,
       })
     })
     socket.on('join_game_success', (data) => {
@@ -129,6 +132,13 @@ class Game extends React.Component {
         gameId: data.game_id,
         squares: data.board,
         history: data.history,
+        gameMessage: "Successfully Joined!",
+      })
+    })
+    socket.on('join_game_failure', (data) => {
+      console.log(data)
+      this.setState({
+        gameMessage: data.message,
       })
     })
     socket.on('new_move', (data) => {
@@ -184,19 +194,16 @@ class Game extends React.Component {
     const squares = this.state.squares
     const winner = calculateWinner(squares)
     const moves = history.map((moveInfo, moveNo) => {
-      let moveText;
       if (moveNo) {
         const coords = `(${moveInfo.square % 3 + 1},${Math.floor(moveInfo.square / 3) + 1})`
         const player = moveInfo.player
-        moveText = `${player} -> ${coords}`
-      } else {
-        moveText = 'Beginning'
+        let moveText = `${player} -> ${coords}`
+        return (
+          <li key={moveNo}>
+            <p>{moveText}</p>
+          </li>
+        )
       }
-      return (
-        <li key={moveNo}>
-          <p>{moveText}</p>
-        </li>
-      )
     })
     let status;
     let winningSquares = null;
@@ -216,6 +223,7 @@ class Game extends React.Component {
             gameId={this.state.gameId}
             joinGame={this.joinGame}
             startGame={this.startGame}
+            message={this.state.gameMessage}
           />
             <ActiveGameBoard
             gameId={this.state.gameId}
@@ -252,7 +260,7 @@ function ActiveGameBoard(props) {
             winningSquares={props.winningSquares}/>
         </div>
         <div className="game-info">
-          <p>Game History</p>
+          <p>Moves</p>
           <ol>{props.moves}</ol>
         </div>
     </div>
