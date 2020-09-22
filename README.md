@@ -11,3 +11,15 @@ to the socket.io based server.
 * https://flask.palletsprojects.com/en/1.1.x/
 * https://codeburst.io/building-your-first-chat-application-using-flask-in-7-minutes-f98de4adfa5d 
 * https://reactjs.org/tutorial/tutorial.html
+
+## To Run:
+The server requires flask, flask-sqlalchemy and flask-socketio
+
+```
+cd tutorial-tic-server  
+python main.py  
+cd ../tutorial-tic-client
+npm start  
+```
+  
+Now open http://localhost:3000
